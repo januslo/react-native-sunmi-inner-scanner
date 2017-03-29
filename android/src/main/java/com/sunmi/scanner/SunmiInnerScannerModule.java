@@ -6,9 +6,11 @@ import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.ReadableArray;
+import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.BaseActivityEventListener;
 import com.facebook.react.bridge.ActivityEventListener;
+import com.facebook.react.bridge.WritableNativeMap;
 import android.widget.Toast;
 import java.util.Map;
 import java.io.IOException;
@@ -43,25 +45,30 @@ public class SunmiInnerScannerModule extends ReactContextBaseJavaModule {
 
 		@Override
 		public void onActivityResult(Activity activity, int requestCode, int resultCode, Intent data) {
+		try{
 			if (requestCode == 2345 && data!=null) {
 				Bundle bundle = data.getExtras();
 				ArrayList<HashMap<String, String>> result = (ArrayList<HashMap<String, String>>) bundle.getSerializable("data");
 				Iterator<HashMap<String, String>> it = result.iterator();
-				HashMap<String, String> hashMap =null;
+				WritableNativeMap wnm =null;
 				while (it.hasNext()) {
-					hashMap = it.next();
-	            Log.i("sunmi", hashMap.get("TYPE"));//这个是扫码的类型
-	            Log.i("sunmi", hashMap.get("VALUE"));//这个是扫码的结果                                
+					Map<String,String> hashMap = it.next();
+					wnm = new WritableNativeMap();
+	            wnm.putString("type", hashMap.get("TYPE"));//这个是扫码的类型
+	            wnm.putString("value", hashMap.get("VALUE"));//这个是扫码的结果                         
 	        }
-	        if(hashMap!=null){
-	        	promise.resolve(hashMap);
+	        if(wnm!=null){
+	        	promise.resolve(wnm);
 	        }else{
 	        	promise.reject("DATA_NOT_FOUND", "No data found");
 	        }
-
 	        promise = null;
-
 	    }
+	}catch(Exception ex){
+		ex.printStackTrace();
+		promise.reject("ERROR", ex.getMessage());
+		 promise = null;
+	}
 
 	}
 };
@@ -76,9 +83,16 @@ public SunmiInnerScannerModule(ReactApplicationContext reactContext) {
 public String getName() {
 	return "SunmiInnerScanner";
 }
-
 @ReactMethod
 public void openScanner(final Promise p){
+	WritableNativeMap options = new WritableNativeMap();
+	options.putBoolean("showSetting",false);
+	options.putBoolean("showAlbum",false);
+	openScannerWithOptions(options,p);
+}
+
+@ReactMethod
+public void openScannerWithOptions(ReadableMap options,final Promise p){
 	promise = p;
 	Activity currentActivity = getCurrentActivity();
 	if (currentActivity == null) {
@@ -88,6 +102,20 @@ public void openScanner(final Promise p){
 	final Intent intent = new Intent("com.summi.scan");
 	intent.setPackage("com.sunmi.sunmiqrcodescanner");
 
+	if(options!=null){
+		if(options.hasKey("paySound")){
+			intent.putExtra("PLAY_SOUND",options.getBoolean("paySound"));
+		}
+		if(options.hasKey("payVibrate")){
+			intent.putExtra("PLAY_VIBRATE",options.getBoolean("payVibrate"));
+		}
+		if(options.hasKey("showSetting")){
+			intent.putExtra("IS_SHOW_SETTING",options.getBoolean("showSetting"));
+		}
+		if(options.hasKey("showAlbum")){
+			intent.putExtra("IS_SHOW_ALBUM",options.getBoolean("showAlbum"));
+		}
+	}
 /**
 
 	//扫码模块有一些功能选项，开发者可以通过传递参数控制这些参数，
