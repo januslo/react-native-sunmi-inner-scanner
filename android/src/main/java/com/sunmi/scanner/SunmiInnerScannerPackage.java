@@ -1,5 +1,6 @@
 package com.sunmi.scanner;
 
+import android.view.View;
 import com.facebook.react.ReactPackage;
 import com.facebook.react.bridge.JavaScriptModule;
 import com.facebook.react.bridge.NativeModule;
@@ -12,23 +13,26 @@ import java.util.List;
 
 public class SunmiInnerScannerPackage implements ReactPackage {
 
-  @Override
-  public List<Class<? extends JavaScriptModule>> createJSModules() {
-    return Collections.emptyList();
-  }
+    @Override
+    public List<Class<? extends JavaScriptModule>> createJSModules() {
+        return Collections.emptyList();
+    }
 
-  @Override
-  public List<ViewManager> createViewManagers(ReactApplicationContext reactContext) {
-    return Collections.emptyList();
-  }
+    @Override
+    public List<ViewManager> createViewManagers(ReactApplicationContext reactContext) {
+        List<ViewManager> managers = new ArrayList<ViewManager>();
+        managers.add(new SunmiInnerScannerViewManager());
 
-  @Override
-  public List<NativeModule> createNativeModules(
-                              ReactApplicationContext reactContext) {
-    List<NativeModule> modules = new ArrayList<>();
+        return managers;
+    }
 
-    modules.add(new SunmiInnerScannerModule(reactContext));
+    @Override
+    public List<NativeModule> createNativeModules(
+            ReactApplicationContext reactContext) {
+        List<NativeModule> modules = new ArrayList<>();
 
-    return modules;
-  }
+        modules.add(new SunmiInnerScannerModule(reactContext));
+
+        return modules;
+    }
 }
