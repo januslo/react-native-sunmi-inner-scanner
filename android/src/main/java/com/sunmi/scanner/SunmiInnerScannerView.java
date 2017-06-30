@@ -23,6 +23,8 @@ public class SunmiInnerScannerView extends FrameLayout implements Camera.Preview
     private SoundUtils soundUtils;
     private AsyncDecode asyncDecode;
     private static final int PADDING=10;
+    private long scanInterval;
+    private int mute;
 
     private static final String TAG = "SunmiInnerScannerView";
 
@@ -57,6 +59,21 @@ public class SunmiInnerScannerView extends FrameLayout implements Camera.Preview
         this.scanner.setConfig(0, Config.ENABLE_INVERSE, enable);
     }
 
+    public int isMute() {
+        return mute;
+    }
+
+    public void setMute(int mute) {
+        this.mute = mute;
+    }
+
+    public long getScanInterval() {
+        return scanInterval;
+    }
+
+    public void setScanInterval(long scanInterval) {
+        this.scanInterval = scanInterval;
+    }
 
     public void onResume() {
         mPreview.startCamera(); // workaround for reload js
@@ -83,7 +100,9 @@ public class SunmiInnerScannerView extends FrameLayout implements Camera.Preview
     @Override
     public void onPreviewFrame(byte[] data, Camera camera) {
         try {
-            if(asyncDecode == null || asyncDecode.isStoped()) {
+            long now = System.currentTimeMillis();
+            if(asyncDecode == null ||
+                    (asyncDecode.isStoped() && now - asyncDecode.getEndTimeMillis()>this.scanInterval)) {
                 Camera.Parameters parameters = camera.getParameters();
                 Camera.Size size = parameters.getPreviewSize();
                 int width = size.width;
@@ -108,6 +127,7 @@ public class SunmiInnerScannerView extends FrameLayout implements Camera.Preview
                         scanImageRect.width(),scanImageRect.height());
                 source.setData(data);// 填充数据
                 asyncDecode = new AsyncDecode();
+                asyncDecode.setMute(this.isMute()>0);//静音
                 asyncDecode.execute(source);// 调用异步执行解码
             }
 
@@ -143,23 +163,20 @@ public class SunmiInnerScannerView extends FrameLayout implements Camera.Preview
     private class AsyncDecode extends AsyncTask<Image, Void, Void> {
         private boolean stoped = true;
         private  WritableArray array;
-
+        private long endTimeMillis;
+        private boolean mute;
         @Override
         protected Void doInBackground(Image... params) {
             stoped = false;
             StringBuilder sb = new StringBuilder();
             Image src_data = params[0];// 获取灰度数据
 
-            long startTimeMillis = System.currentTimeMillis();
-
             // 解码，返回值为0代表失败，>0表示成功
             int nsyms = scanner.scanImage(src_data);
-
-            long endTimeMillis = System.currentTimeMillis();
-            long cost_time = endTimeMillis - startTimeMillis;
-
             if (nsyms != 0) {
-                soundUtils.playSound(0, SoundUtils.SINGLE_PLAY);// 解码成功播放提示音
+                if(!this.mute) {
+                    soundUtils.playSound(0, SoundUtils.SINGLE_PLAY);// 解码成功播放提示音
+                }
                 array = new WritableNativeArray();
                 SymbolSet syms = scanner.getResults();// 获取解码结果
                 for (Symbol sym : syms) {
@@ -169,10 +186,9 @@ public class SunmiInnerScannerView extends FrameLayout implements Camera.Preview
                     array.pushMap(r);
                 }
             }
+
             return null;
         }
-
-
 
         @Override
         protected void onPostExecute(Void result) {
@@ -183,10 +199,18 @@ public class SunmiInnerScannerView extends FrameLayout implements Camera.Preview
                 map.putArray("result",array);
                 sendEvent((ReactContext)getContext(),TAG+".RESULT",map);
             }
+            endTimeMillis = System.currentTimeMillis();
         }
 
         public boolean isStoped() {
             return stoped;
+        }
+        public long getEndTimeMillis(){
+            return this.endTimeMillis;
+        }
+
+        public void setMute(boolean mute) {
+            this.mute = mute;
         }
     }
 }

@@ -138,19 +138,15 @@ providing the properties definition for referring:
     static propTypes = {
         ...View.propTypes,
         xDensity: PropTypes.oneOfType([
-            PropTypes.string,
             PropTypes.number
         ]),
         yDensity: PropTypes.oneOfType([
-            PropTypes.string,
             PropTypes.number
         ]),
         mutilScanEnable: PropTypes.oneOfType([
-            PropTypes.string,
             PropTypes.number
         ]),
         inverseEnable: PropTypes.oneOfType([
-            PropTypes.string,
             PropTypes.number
         ]),
         onCodeScan: React.PropTypes.func
@@ -162,6 +158,8 @@ providing the properties definition for referring:
         inverseEnable: 1,
         onCodeScan: function (result) {
             console.log(result);
-        }
+        },
+        scanInterval:1000, // interval of scan operation after last record was recongized. 
+        mute:0 // mute the "bee" sound on success. 1 - mute;0 - not mute
     }
 ```

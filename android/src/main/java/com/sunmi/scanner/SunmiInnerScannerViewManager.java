@@ -40,6 +40,14 @@ public class SunmiInnerScannerViewManager extends ViewGroupManager<SunmiInnerSca
         view.setInverseEnable(enable);
     }
 
+    @ReactProp(name="scanInterval")
+    public void setScanInterval(SunmiInnerScannerView view, int interval){
+        view.setScanInterval(Long.valueOf(interval));
+    }
+
+    @ReactProp(name = "mute")
+    public void setMute(SunmiInnerScannerView view, int mute){view.setMute(mute);}
+
     @Override
     public void addView(SunmiInnerScannerView parent, View child, int index) {
         parent.addView(child,index+1);

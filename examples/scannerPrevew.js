@@ -13,7 +13,8 @@ import {
     TouchableHighlight,
     BackAndroid,
     Dimensions,
-    Navigator
+    Navigator,
+    Button
 } from 'react-native';
 
 import {SunmiScannerView} from 'react-native-sunmi-inner-scanner';
@@ -22,17 +23,25 @@ export default class scannerPrevew extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            result: ""
+            result: "",
+            mute:0,
+            interval:500
         }
     }
 
     render() {
         return <View style={styles.container}>
             <Text>Scan Result: {this.state.result}</Text>
+            <Button title={this.state.mute?"not mute":"mute"} onPress={()=>{
+                    this.setState({
+                    mute:this.state.mute?0:1
+                    })
+            }
+            }></Button>
             <View>
-                <SunmiScannerView style={styles.scanner} onCodeScan={(data)=>{
+                <SunmiScannerView style={styles.scanner} mute={this.state.mute} scanInterval={this.state.interval}  onCodeScan={(data)=>{
                 this.setState({
-                result:JSON.stringify(data)
+                result:JSON.stringify(data)+" [mute:"+this.state.mute+"]"
                 })
             }
             }>

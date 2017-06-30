@@ -27,22 +27,25 @@ export class SunmiScannerView extends Component {
     static propTypes = {
         ...View.propTypes,
         xDensity: PropTypes.oneOfType([
-            PropTypes.string,
             PropTypes.number
         ]),
         yDensity: PropTypes.oneOfType([
-            PropTypes.string,
             PropTypes.number
         ]),
         mutilScanEnable: PropTypes.oneOfType([
-            PropTypes.string,
             PropTypes.number
         ]),
         inverseEnable: PropTypes.oneOfType([
             PropTypes.string,
             PropTypes.number
         ]),
-        onCodeScan: React.PropTypes.func
+        onCodeScan: React.PropTypes.func,
+        scanInterval:PropTypes.oneOfType([
+            PropTypes.number
+        ]),
+        mute:PropTypes.oneOfType([
+            PropTypes.number
+        ])
     };
     static defaultProps = {
         xDensity: 2,
@@ -51,7 +54,9 @@ export class SunmiScannerView extends Component {
         inverseEnable: 1,
         onCodeScan: function (result) {
             console.log(result);
-        }
+        },
+        scanInterval:1000,
+        mute:0
     }
 
     render() {
