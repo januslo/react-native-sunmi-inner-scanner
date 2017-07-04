@@ -76,13 +76,11 @@ public class SunmiInnerScannerView extends FrameLayout implements Camera.Preview
     }
 
     public void onResume() {
-        mPreview.startCamera(); // workaround for reload js
-        // mPreview.onResume();
+        mPreview.startCamera();
     }
 
     public void onPause() {
-        mPreview.stopCamera();  // workaround for reload js
-        // mPreview.onPause();
+        mPreview.stopCamera();
     }
 
     public void setCameraType(String cameraType) {
@@ -168,7 +166,6 @@ public class SunmiInnerScannerView extends FrameLayout implements Camera.Preview
         @Override
         protected Void doInBackground(Image... params) {
             stoped = false;
-            StringBuilder sb = new StringBuilder();
             Image src_data = params[0];// 获取灰度数据
 
             // 解码，返回值为0代表失败，>0表示成功

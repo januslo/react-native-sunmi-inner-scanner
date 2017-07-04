@@ -11,7 +11,7 @@ import {
     TouchableOpacity,
     Image,
     TouchableHighlight,
-    BackAndroid,
+    BackHandler,
     Dimensions,
     Navigator,
     Button
@@ -28,6 +28,13 @@ export default class scannerPrevew extends Component {
             interval:500
         }
     }
+    componentWillMount(){
+        BackHandler.addEventListener('hardwareBackPress', this._onBackAndroid);
+    }
+    componentWillUnmount() {
+        BackHandler.removeEventListener('hardwareBackPress', this._onBackAndroid);
+    }
+
 
     render() {
         return <View style={styles.container}>
@@ -38,7 +45,7 @@ export default class scannerPrevew extends Component {
                     })
             }
             }></Button>
-            <View>
+            <View style={{flex:1}}>
                 <SunmiScannerView style={styles.scanner} mute={this.state.mute} scanInterval={this.state.interval}  onCodeScan={(data)=>{
                 this.setState({
                 result:JSON.stringify(data)+" [mute:"+this.state.mute+"]"
@@ -46,9 +53,15 @@ export default class scannerPrevew extends Component {
             }
             }>
                 </SunmiScannerView>
-                <View style={styles.finder}></View>
             </View>
         </View>
+    }
+    _onBackAndroid=()=>{
+        const navigator= this.props.navigator;
+        if(navigator){
+            navigator.pop();
+        }
+        return true;
     }
 
 }
@@ -56,22 +69,14 @@ export default class scannerPrevew extends Component {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: "#fff",
+        backgroundColor: "#fff"
     },
     scanner: {
-        height: 450,
+        flex:1,
         justifyContent: 'center',
-        alignItems: 'center'
-    },
-    finder: {
-        position: 'absolute',
-        top: 110,
-        left: 40,
-        width: 280,
-        height: 250,
+        alignItems: 'center',
         borderStyle: 'solid',
-        borderColor: '#00aa00',
-        borderWidth: 1,
-        backgroundColor: 'rgba(52, 52, 52, 0)'
+        borderColor: '#0000aa',
+        borderWidth: 1
     }
 });

@@ -13,7 +13,7 @@ import {
     TouchableOpacity,
     Image,
     TouchableHighlight,
-    BackAndroid,
+    BackHandler,
     Dimensions,
     Navigator
 } from 'react-native';
@@ -38,13 +38,14 @@ export default class example extends Component {
     render() {
         return (
             <View style={styles.container}>
-                <View><Text>Scan Result:{this.state.result}</Text></View>
+                <View><Text>Scan Result 1:{this.state.result}</Text></View>
                 <View style={{flex: 1,justifyContent: 'center',alignItems:'center'}}>
                     <TouchableOpacity style={styles.buttonstyle} onPress={() =>this._openDefaultScanner() }>
                         <Text style={{fontSize:16}}>Default Scanner</Text>
                     </TouchableOpacity>
                     <TouchableOpacity style={styles.buttonstyle} onPress={() =>{this.props.navigator.push({
-                    component:scannerPrevew
+                    component:scannerPrevew,
+                    type:'Normal'
                     })}}>
                         <Text style={{fontSize:16}}>Customer Scanner Preview</Text>
                     </TouchableOpacity>
@@ -58,7 +59,10 @@ export default class example extends Component {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor:"#fff"
+        backgroundColor:"#fff",
+        borderStyle:'solid',
+        borderWidth:1,
+        borderColor:'#ff0000'
     },
     textview: {
         height: 45,

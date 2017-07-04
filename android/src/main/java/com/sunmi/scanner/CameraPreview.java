@@ -5,6 +5,7 @@ package com.sunmi.scanner;
  */
 
 import android.content.Context;
+import android.graphics.PixelFormat;
 import android.hardware.Camera;
 import android.os.Handler;
 import android.util.Log;
@@ -25,7 +26,9 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
 
     public CameraPreview(Context context, Camera.PreviewCallback previewCallback) {
         super(context);
-        this.getHolder().setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
+       this.getHolder().setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
+        setZOrderOnTop(true);
+        this.getHolder().setFormat(PixelFormat.TRANSPARENT);
         mCameraManager = new CameraManager();
         mAutoFocusHandler = new Handler();
         mPreviewCallback = previewCallback;
@@ -39,6 +42,7 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
     public void stopCamera() {
         stopCameraPreview();
         mCameraManager.releaseCamera();
+        Log.w(TAG,"stopCamera");
     }
 
     public void setCameraType(String cameraType) {
@@ -76,6 +80,7 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
                 mPreviewing = false;
                 getHolder().removeCallback(this);
                 mCamera.cancelAutoFocus();
+                mCamera.setPreviewDisplay(null);
                 mCamera.setPreviewCallback(null);
                 mCamera.stopPreview();
             } catch (Exception e) {
@@ -191,7 +196,7 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
     }
 
     public void onPause() {
-        stopCameraPreview();
+       stopCameraPreview();
     }
 
     public void onResume() {
