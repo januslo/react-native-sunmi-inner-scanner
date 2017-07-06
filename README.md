@@ -7,10 +7,10 @@ _ **Caution: this is not the official project. I share it because I am working o
 ======================================================================================
 **Installation:**
 
-Step 1. install with npm:
+Step 1. install with npm: [Checks In the NPM](https://www.npmjs.com/package/react-native-sunmi-inner-scanner)
 
 ```bash
-npm install januslo/react-natvie-sunmi-inner-scanner --save
+npm i react-native-sunmi-inner-scanner --save
 ```
 
 or you may need to install via the clone address directly:
