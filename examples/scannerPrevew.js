@@ -45,15 +45,12 @@ export default class scannerPrevew extends Component {
                     })
             }
             }></Button>
-            <View style={{flex:1}}>
                 <SunmiScannerView style={styles.scanner} mute={this.state.mute} scanInterval={this.state.interval}  onCodeScan={(data)=>{
                 this.setState({
                 result:JSON.stringify(data)+" [mute:"+this.state.mute+"]"
                 })
             }
-            }>
-                </SunmiScannerView>
-            </View>
+            }><View style={styles.viewInner}></View></SunmiScannerView><View style={styles.finder}></View>
         </View>
     }
     _onBackAndroid=()=>{
@@ -76,7 +73,27 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         borderStyle: 'solid',
-        borderColor: '#0000aa',
+        borderColor: '#ff0000',
         borderWidth: 1
+    },
+    finder: {
+        position: 'absolute',
+        top: 110,
+        left: 40,
+        width: 280,
+        height: 250,
+        borderStyle: 'solid',
+        borderColor: '#00aa00',
+        borderWidth: 1,
+        backgroundColor: 'rgba(52, 52, 52, 0)'
+    },
+    viewInner:{
+        position:'relative',
+        width: width/2,
+        height: width/2,
+        borderStyle: 'solid',
+        borderColor: 'red',
+        borderWidth: 1,
+        backgroundColor: 'rgba(52, 52, 52, 0)'
     }
 });

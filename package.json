@@ -1,6 +1,6 @@
 {
   "name": "react-native-sunmi-inner-scanner",
-  "version": "0.1.6",
+  "version": "0.1.7",
   "description": "http://docs.sunmi.com/htmls/index.html?lang=zh##V1文档资源 根据商米V1文档开发的扫码for React Native.",
   "author": "Janus J K Lu <januslo6211@gmail.com>",
   "contributors": [],
@@ -25,9 +25,6 @@
     "二维码",
     "条形码"
   ],
-  "license": "",
-  "private": false,
-  "peerDependencies": {
-    "react-native": ">=0.42.3"
-  }
+  "license": "MIT",
+  "private": false
 }

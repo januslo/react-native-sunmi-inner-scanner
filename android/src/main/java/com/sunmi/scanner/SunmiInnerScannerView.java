@@ -7,8 +7,9 @@ import android.hardware.Camera;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.view.Display;
+import android.view.View;
 import android.view.WindowManager;
-import android.widget.FrameLayout;
+import android.widget.RelativeLayout;
 import com.facebook.react.bridge.*;
 import com.facebook.react.modules.core.DeviceEventManagerModule;
 import com.sunmi.scan.*;
@@ -17,7 +18,7 @@ import com.sunmi.scan.*;
  * Created by januslo on 2017/5/16.
  */
 
-public class SunmiInnerScannerView extends FrameLayout implements Camera.PreviewCallback {
+public class SunmiInnerScannerView extends RelativeLayout implements Camera.PreviewCallback {
     private CameraPreview mPreview;
     private ImageScanner scanner;
     private SoundUtils soundUtils;
@@ -32,7 +33,6 @@ public class SunmiInnerScannerView extends FrameLayout implements Camera.Preview
         super(context);
         scanner = new ImageScanner();
         mPreview = new CameraPreview(context, this);
-        mPreview.startCamera();
         try {
             soundUtils = new SoundUtils(context, SoundUtils.RING_SOUND);
             soundUtils.putSound(0, context.getResources().getIdentifier("beep", "raw", context.getPackageName()));
@@ -95,6 +95,13 @@ public class SunmiInnerScannerView extends FrameLayout implements Camera.Preview
         mPreview.stopCamera();
     }
 
+    @Override
+    public void onViewAdded(View child) {
+        Log.w(TAG, "onViewAdded");
+        if (this.mPreview == child) return;
+        this.removeView(this.mPreview);
+        this.addView(this.mPreview,0);
+    }
     @Override
     public void onPreviewFrame(byte[] data, Camera camera) {
         try {
