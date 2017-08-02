@@ -24,7 +24,7 @@ Step 2:
 Links this plugin to your project.
 
 ```bash
-react-native link react-natvie-sunmi-inner-scanner
+react-native link react-native-sunmi-inner-scanner
 ```
 
 or you may need to link manually 
