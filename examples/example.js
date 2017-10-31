@@ -35,6 +35,22 @@ export default class example extends Component {
         this.setState({result: JSON.stringify(result)});
 
     }
+
+    async _openScannerWithOptions(){
+        let options={
+            showSetting:true,
+            showAlbum:true,
+            paySound:true,
+            payVibrate:true,// V1 not support
+        }
+        let result = await SunmiInnerScanner.openScannerWithOptions(options);
+        this.setState({result: JSON.stringify(result)}
+            ,()=>{
+                console.log(this.state.result);
+            });
+
+    }
+
     render() {
         return (
             <View style={styles.container}>
@@ -42,6 +58,9 @@ export default class example extends Component {
                 <View style={{flex: 1,justifyContent: 'center',alignItems:'center'}}>
                     <TouchableOpacity style={styles.buttonstyle} onPress={() =>this._openDefaultScanner() }>
                         <Text style={{fontSize:16}}>Default Scanner</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.buttonstyle} onPress={() =>this._openScannerWithOptions() }>
+                        <Text style={{fontSize:16}}>Default Scanner With Options</Text>
                     </TouchableOpacity>
                     <TouchableOpacity style={styles.buttonstyle} onPress={() =>{this.props.navigator.push({
                     component:scannerPrevew,
