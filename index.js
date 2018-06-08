@@ -1,9 +1,10 @@
-import React,{Component,PropTypes} from 'react';
+import React,{Component} from 'react';
 import { NativeModules,
     requireNativeComponent,
     View,
     DeviceEventEmitter
 } from 'react-native';
+import PropTypes from 'prop-types'
 
 const SunmiInnerScanner = NativeModules.SunmiInnerScanner;
 export default SunmiInnerScanner;
@@ -26,26 +27,16 @@ export class SunmiScannerView extends Component {
 
     static propTypes = {
         ...View.propTypes,
-        xDensity: PropTypes.oneOfType([
-            PropTypes.number
-        ]),
-        yDensity: PropTypes.oneOfType([
-            PropTypes.number
-        ]),
-        mutilScanEnable: PropTypes.oneOfType([
-            PropTypes.number
-        ]),
+        xDensity: PropTypes.number,
+        yDensity: PropTypes.number,
+        mutilScanEnable: PropTypes.number,
         inverseEnable: PropTypes.oneOfType([
             PropTypes.string,
             PropTypes.number
         ]),
-        onCodeScan: React.PropTypes.func,
-        scanInterval:PropTypes.oneOfType([
-            PropTypes.number
-        ]),
-        mute:PropTypes.oneOfType([
-            PropTypes.number
-        ])
+        onCodeScan: PropTypes.func,
+        scanInterval: PropTypes.number,
+        mute: PropTypes.number
     };
     static defaultProps = {
         xDensity: 2,
