@@ -26,5 +26,10 @@
     "条形码"
   ],
   "license": "MIT",
-  "private": false
+  "private": false,
+  "dependencies": {
+    "prop-types": "^15.6.1",
+    "react": "^16.4.0",
+    "react-native": "^0.55.4"
+  }
 }
