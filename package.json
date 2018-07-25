@@ -27,9 +27,9 @@
   ],
   "license": "MIT",
   "private": false,
-  "dependencies": {
+  "peerDependencies": {
     "prop-types": "^15.6.1",
     "react": "^16.4.0",
-    "react-native": "^0.55.4"
+    "react-native": "^0.56.0"
   }
 }
